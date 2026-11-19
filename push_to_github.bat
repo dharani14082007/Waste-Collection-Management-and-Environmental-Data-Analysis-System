@@ -6,7 +6,7 @@ REM ============================================================================
 echo ==========================================================================
 echo   Pushing Waste Collection Management System to GitHub
 echo   Account : dharani14082007 (dharani14082007@gmail.com)
-echo   Repo    : Waste-Collection-Management-and-Environmental-Data-Analysis-System
+echo   Repo    : Municipal-Waste-Collection-Management-System
 echo ==========================================================================
 echo.
 
@@ -21,13 +21,13 @@ echo [INFO] Pushing branch 'main' to GitHub...
 echo (If prompted, sign in via browser or enter your GitHub Personal Access Token)
 echo.
 
-%GIT_EXE% push -u origin main --force
+%GIT_EXE% push -u origin main
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ==========================================================================
     echo   [SUCCESS] Project successfully pushed to:
-    echo   https://github.com/dharani14082007/Waste-Collection-Management-and-Environmental-Data-Analysis-System
+    echo   https://github.com/dharani14082007/Municipal-Waste-Collection-Management-System
     echo ==========================================================================
 ) else (
     echo.
