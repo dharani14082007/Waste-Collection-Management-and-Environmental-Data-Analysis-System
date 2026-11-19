@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WCM-EDAS | Municipal Waste Collection Management & Environmental Analytics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .gradient-header { background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); }
+        .badge-bio { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .badge-rec { background-color: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+        .badge-non { background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .badge-haz { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Institution Header -->
+    <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
+                        <i class="fa-solid fa-recycle text-emerald-300 text-2xl animate-pulse"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-emerald-200 bg-emerald-900/40 px-2 py-0.5 rounded">Scenario 23</span>
+                            <span class="text-xs text-teal-100 font-medium">VCET Autonomous | Dept. of Information Technology</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Waste Collection Management & Environmental Data Analysis</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 bg-white/10 backdrop-blur px-4 py-2 rounded-xl border border-white/20">
+                    <div class="text-right">
+                        <div class="text-xs text-teal-200 font-medium">Student Developer</div>
+                        <div class="text-sm font-bold text-white tracking-wide">DHARANI K K</div>
+                        <div class="text-xs text-teal-100">Register No: <span class="font-bold text-emerald-300">23</span> | Class: 25IT3A&B</div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/30 flex items-center justify-center border border-emerald-300/40 text-white font-bold">
+                        23
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex space-x-1 sm:space-x-2 mt-4 overflow-x-auto pb-1 text-sm font-medium border-t border-teal-600/40 pt-2.5">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab px-3.5 py-1.5 rounded-lg bg-white/20 text-white flex items-center space-x-2 whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('areas')" id="tab-btn-areas" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-city"></i><span>Residential Areas (FR-01)</span>
+                </button>
+                <button onclick="switchTab('vehicles')" id="tab-btn-vehicles" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-truck-moving"></i><span>Vehicle Fleet (FR-02)</span>
+                </button>
+                <button onclick="switchTab('tasks')" id="tab-btn-tasks" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-clipboard-list"></i><span>Collection Tasks (FR-03 & 04)</span>
+                </button>
+                <button onclick="switchTab('logging')" id="tab-btn-logging" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-scale-balanced"></i><span>Waste Logging & Overload Monitor</span>
+                </button>
+                <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-chart-line"></i><span>Python Analytics & Visualizations</span>
+                </button>
+                <button onclick="switchTab('docs')" id="tab-btn-docs" class="nav-tab px-3.5 py-1.5 rounded-lg text-teal-100 hover:bg-white/10 flex items-center space-x-2 whitespace-nowrap transition">
+                    <i class="fa-solid fa-book"></i><span>SRS & Design Docs</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <!-- KPI Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- KPI 1 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Waste Collected</p>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1" id="kpi-total-waste">79,040 kg</h3>
+                        <p class="text-xs text-emerald-600 font-medium mt-1 flex items-center">
+                            <i class="fa-solid fa-arrow-trend-up mr-1"></i> 79.04 Metric Tons Logged
+                        </p>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">
+                        <i class="fa-solid fa-dumpster"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Wards Monitored</p>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1" id="kpi-total-areas">10 Areas</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-1">204,200 Total Population</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Fleet Utilization</p>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1" id="kpi-fleet-util">87.4%</h3>
+                        <p class="text-xs text-teal-600 font-medium mt-1">8 Active Municipal Vehicles</p>
+                    </div>
+                    <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">
+                        <i class="fa-solid fa-truck-front"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Task Completion Rate</p>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1" id="kpi-task-rate">87.5%</h3>
+                        <p class="text-xs text-emerald-600 font-medium mt-1">21 of 24 Schedules Completed</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Category Segregation Donut -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-slate-800 text-base">Waste Segregation Proportions</h4>
+                        <span class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-200">FR-05</span>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center relative min-h-[260px]">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-100 text-xs">
+                        <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span>Biodegradable (~58%)</span></div>
+                        <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span>Recyclable (~28%)</span></div>
+                        <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-slate-400"></span><span>Non-Recyclable (~12%)</span></div>
+                        <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-rose-500"></span><span>Hazardous (~2%)</span></div>
+                    </div>
+                </div>
+
+                <!-- Area-wise Waste Bar Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 lg:col-span-2 flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-slate-800 text-base">Top Residential Wards by Waste Output (kg)</h4>
+                        <span class="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-200">FR-06</span>
+                    </div>
+                    <div class="flex-1 min-h-[280px]">
+                        <canvas id="areaBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Collection Trend Chart -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-base">Daily Municipal Waste Generation Trends (Nov 2026)</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">Tracking volume segregation over time across collection schedules</p>
+                    </div>
+                    <span class="text-xs font-semibold bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full border border-teal-200">FR-07 Python/SQL</span>
+                </div>
+                <div class="h-72">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: RESIDENTIAL AREAS ================= -->
+        <section id="tab-areas" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Residential Areas Registry (FR-01)</h3>
+                    <p class="text-xs text-slate-500">Maintain area details, geographical wards, and population metrics</p>
+                </div>
+                <button onclick="openModal('areaModal')" class="bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 transition shadow-sm">
+                    <i class="fa-solid fa-plus"></i><span>Register New Area</span>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm" id="areasTable">
+                        <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-xs">
+                            <tr>
+                                <th class="px-5 py-3.5">Area ID</th>
+                                <th class="px-5 py-3.5">Area Name</th>
+                                <th class="px-5 py-3.5">Ward / Zone Location</th>
+                                <th class="px-5 py-3.5 text-right">Population</th>
+                                <th class="px-5 py-3.5 text-right">Total Waste Logged</th>
+                                <th class="px-5 py-3.5 text-right">Per-Capita (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="areasTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: VEHICLE FLEET ================= -->
+        <section id="tab-vehicles" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Waste Collection Vehicle Fleet (FR-02)</h3>
+                    <p class="text-xs text-slate-500">Track fleet inventory, payload capacities, and operational statuses</p>
+                </div>
+                <button onclick="openModal('vehicleModal')" class="bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 transition shadow-sm">
+                    <i class="fa-solid fa-plus"></i><span>Register New Vehicle</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="vehicleCardsGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: COLLECTION TASKS ================= -->
+        <section id="tab-tasks" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Collection Schedules & Task Assignment (FR-03 & FR-04)</h3>
+                    <p class="text-xs text-slate-500">Assign vehicles to residential areas and monitor execution lifecycle</p>
+                </div>
+                <button onclick="openModal('taskModal')" class="bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 transition shadow-sm">
+                    <i class="fa-solid fa-calendar-plus"></i><span>Schedule Collection Task</span>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm" id="tasksTable">
+                        <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-xs">
+                            <tr>
+                                <th class="px-5 py-3.5">Task ID</th>
+                                <th class="px-5 py-3.5">Scheduled Date</th>
+                                <th class="px-5 py-3.5">Target Area</th>
+                                <th class="px-5 py-3.5">Assigned Vehicle</th>
+                                <th class="px-5 py-3.5 text-right">Payload (kg)</th>
+                                <th class="px-5 py-3.5">Utilization %</th>
+                                <th class="px-5 py-3.5">Status</th>
+                                <th class="px-5 py-3.5 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="tasksTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 5: WASTE LOGGING & OVERLOAD MONITOR ================= -->
+        <section id="tab-logging" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Input Form -->
+                <div class="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                    <div class="flex items-center space-x-3 mb-5 pb-3 border-b border-slate-100">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-scale-unbalanced-flip"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Record Waste Collection (FR-05)</h3>
+                            <p class="text-xs text-slate-500">Log categorized waste weights with automatic overload detection</p>
+                        </div>
+                    </div>
+
+                    <form id="wasteRecordForm" onsubmit="handleWasteSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Select Active Task</label>
+                            <select id="logTaskId" onchange="onTaskSelectChange()" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50">
+                                <option value="">-- Choose Collection Task --</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Waste Segregation Category</label>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <label class="border border-emerald-300 bg-emerald-50/50 p-2.5 rounded-xl cursor-pointer flex items-center space-x-2">
+                                    <input type="radio" name="wasteCat" value="1" checked class="text-teal-600 focus:ring-teal-500">
+                                    <span class="font-medium text-emerald-900">1. Biodegradable (Organic)</span>
+                                </label>
+                                <label class="border border-blue-300 bg-blue-50/50 p-2.5 rounded-xl cursor-pointer flex items-center space-x-2">
+                                    <input type="radio" name="wasteCat" value="2" class="text-teal-600 focus:ring-teal-500">
+                                    <span class="font-medium text-blue-900">2. Recyclable (Dry/Paper)</span>
+                                </label>
+                                <label class="border border-slate-300 bg-slate-100/50 p-2.5 rounded-xl cursor-pointer flex items-center space-x-2">
+                                    <input type="radio" name="wasteCat" value="3" class="text-teal-600 focus:ring-teal-500">
+                                    <span class="font-medium text-slate-900">3. Non-Recyclable (Inert)</span>
+                                </label>
+                                <label class="border border-rose-300 bg-rose-50/50 p-2.5 rounded-xl cursor-pointer flex items-center space-x-2">
+                                    <input type="radio" name="wasteCat" value="4" class="text-teal-600 focus:ring-teal-500">
+                                    <span class="font-medium text-rose-900">4. Hazardous (E-Waste)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Measured Waste Weight (Kilograms)</label>
+                            <div class="relative">
+                                <input type="number" id="logQuantity" step="0.1" min="0.1" placeholder="e.g. 1450.5" required oninput="calculateLivePayload()" class="w-full border border-slate-300 rounded-xl pl-3.5 pr-12 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                                <span class="absolute right-3.5 top-2.5 text-sm font-semibold text-slate-400">kg</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 transition shadow">
+                            <i class="fa-solid fa-floppy-disk"></i><span>Log Waste & Validate Payload</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Live Payload & Overload Gauge Monitor -->
+                <div class="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">Vehicle Payload & Overload Gauge</h3>
+                                <p class="text-xs text-slate-500">Real-time capacity monitor for assigned vehicle</p>
+                            </div>
+                            <span id="overloadBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">STANDBY</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 text-sm space-y-2">
+                                <div class="flex justify-between"><span class="text-slate-500">Assigned Area:</span><span class="font-semibold text-slate-800" id="gaugeArea">-</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Vehicle:</span><span class="font-semibold text-slate-800" id="gaugeVehicle">-</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Rated Capacity:</span><span class="font-bold text-slate-800" id="gaugeCapacity">0.0 kg</span></div>
+                                <div class="flex justify-between"><span class="text-slate-500">Current Load on Vehicle:</span><span class="font-bold text-teal-700" id="gaugeCurrentLoad">0.0 kg</span></div>
+                            </div>
+
+                            <!-- Progress Bar Gauge -->
+                            <div>
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-slate-600">Payload Utilization</span>
+                                    <span id="gaugePercent" class="text-teal-700">0.0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden border border-slate-200">
+                                    <div id="gaugeBar" class="bg-teal-600 h-full transition-all duration-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] text-slate-400 font-medium mt-1">
+                                    <span>0% Empty</span>
+                                    <span>90% Target</span>
+                                    <span class="text-rose-500 font-bold">100% Max Rated</span>
+                                </div>
+                            </div>
+
+                            <!-- Overload Alert Banner -->
+                            <div id="overloadAlertBox" class="hidden p-4 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 flex items-start space-x-3">
+                                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-xl mt-0.5"></i>
+                                <div class="text-xs">
+                                    <h5 class="font-bold text-rose-900 text-sm">OVERLOAD ALERT FLAGGED!</h5>
+                                    <p class="mt-0.5">The total collected waste exceeds the vehicle's maximum certified capacity. Municipal regulations require dispatching a secondary support truck.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                        <span>Status: <strong class="text-emerald-700">System Monitoring Active</strong></span>
+                        <span>Safety Policy: <strong>Rule 42/Tonnage Act</strong></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 6: PYTHON ANALYTICS & VISUALIZATIONS ================= -->
+        <section id="tab-analytics" class="tab-content hidden space-y-6">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Python Environmental Data Science Analysis (FR-07)</h3>
+                    <p class="text-xs text-slate-500">25ITC31 Course Requirements: Data Preprocessing, IQR Outlier Detection, Statistical Modeling & Visualizations</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-3 py-1 rounded-full border border-emerald-200">6 High-Res Charts</span>
+                    <span class="text-xs bg-blue-100 text-blue-800 font-semibold px-3 py-1 rounded-full border border-blue-200">Pandas & Seaborn</span>
+                </div>
+            </div>
+
+            <!-- Visualizations Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Chart 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 1: Matplotlib Bar</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Area-wise Waste Distribution</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/1_area_wise_waste_distribution.png" onerror="this.src='../python-analysis/visualizations/1_area_wise_waste_distribution.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 1">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Highlights total waste volume across 10 municipal wards. Surampatti and Veerappanchatram lead municipal collection loads.</p>
+                    </div>
+                </div>
+
+                <!-- Chart 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 2: Matplotlib Donut</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Waste Category Proportions</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/2_waste_category_breakdown.png" onerror="this.src='../python-analysis/visualizations/2_waste_category_breakdown.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 2">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Biodegradable organic waste constitutes 58.6% of all municipal waste, pointing to strong compost monetization potential.</p>
+                    </div>
+                </div>
+
+                <!-- Chart 3 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 3: Seaborn Box Plot</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Vehicle Capacity Utilization</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/3_vehicle_capacity_utilization.png" onerror="this.src='../python-analysis/visualizations/3_vehicle_capacity_utilization.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 3">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Box and strip plot analyzing operational payload distribution across Compactor, Tipper, and Electric cart fleet classes.</p>
+                    </div>
+                </div>
+
+                <!-- Chart 4 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 4: Time Series Line</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Daily Collection Trends</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/4_daily_collection_trends.png" onerror="this.src='../python-analysis/visualizations/4_daily_collection_trends.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 4">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Time series tracking day-over-day changes across categories, isolating midweek spikes and weekend dips in waste generation.</p>
+                    </div>
+                </div>
+
+                <!-- Chart 5 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 5: Regression & Correlation</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Population vs. Waste Load</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/5_population_vs_waste_correlation.png" onerror="this.src='../python-analysis/visualizations/5_population_vs_waste_correlation.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 5">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Demonstrates a strong positive Pearson correlation (r = 0.817) between ward population density and daily waste generation tonnage.</p>
+                    </div>
+                </div>
+
+                <!-- Chart 6 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                        <span class="text-[10px] font-bold text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Chart 6: Categorical Count</span>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">Task Completion Lifecycle</h4>
+                    </div>
+                    <div class="p-3 bg-slate-100 flex items-center justify-center">
+                        <img src="static/images/6_collection_status_overview.png" onerror="this.src='../python-analysis/visualizations/6_collection_status_overview.png'" class="rounded-lg shadow-sm max-h-56 object-contain" alt="Chart 6">
+                    </div>
+                    <div class="p-4 text-xs text-slate-600 flex-1 flex flex-col justify-between">
+                        <p>Summary of completed (87.5%), in-progress, and scheduled routes showing minimal pending administrative bottlenecks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 7: ACADEMIC DOCS ================= -->
+        <section id="tab-docs" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Academic Assessment Documentation</h3>
+                <p class="text-xs text-slate-500 mb-6">Velalar College of Engineering and Technology | Class: 25IT3A&B | Scenario 23</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl border border-slate-200 hover:border-teal-400 transition bg-slate-50">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <i class="fa-solid fa-file-shield text-teal-700 text-lg"></i>
+                            <h4 class="font-bold text-sm text-slate-800">1. Software Requirements Specification</h4>
+                        </div>
+                        <p class="text-xs text-slate-600">Full IEEE 830 compliant SRS document outlining functional and non-functional specifications, actors, and user stories.</p>
+                        <span class="inline-block mt-3 text-xs font-semibold text-teal-700">docs/SRS.md</span>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 hover:border-teal-400 transition bg-slate-50">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <i class="fa-solid fa-sitemap text-blue-700 text-lg"></i>
+                            <h4 class="font-bold text-sm text-slate-800">2. System Architecture & UML Models</h4>
+                        </div>
+                        <p class="text-xs text-slate-600">Comprehensive Use Case, Class, and Sequence diagrams demonstrating OOP design and service decoupling.</p>
+                        <span class="inline-block mt-3 text-xs font-semibold text-blue-700">docs/SYSTEM_DESIGN.md</span>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 hover:border-teal-400 transition bg-slate-50">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <i class="fa-solid fa-database text-purple-700 text-lg"></i>
+                            <h4 class="font-bold text-sm text-slate-800">3. Relational Database & Normalization</h4>
+                        </div>
+                        <p class="text-xs text-slate-600">E-R Diagram, relational schema, check constraints, views, and formal 1NF $\rightarrow$ 2NF $\rightarrow$ 3NF normalization proof.</p>
+                        <span class="inline-block mt-3 text-xs font-semibold text-purple-700">docs/DATABASE_DESIGN_AND_NORMALIZATION.md</span>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 hover:border-teal-400 transition bg-slate-50">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <i class="fa-solid fa-vial-circle-check text-emerald-700 text-lg"></i>
+                            <h4 class="font-bold text-sm text-slate-800">4. Software Testing & Quality Report</h4>
+                        </div>
+                        <p class="text-xs text-slate-600">Equivalence partitioning, boundary value analysis, unit tests, and 13 comprehensive test cases with 100% pass status.</p>
+                        <span class="inline-block mt-3 text-xs font-semibold text-emerald-700">docs/TESTING_AND_TEST_CASES.md</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal 1: Register Area -->
+    <div id="areaModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="font-bold text-base text-slate-800">Register Residential Area</h4>
+                <button onclick="closeModal('areaModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleAreaSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Area Name</label>
+                    <input type="text" id="newAreaName" placeholder="e.g. Chennimalai Road Zone" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Ward / Zone Location</label>
+                    <input type="text" id="newAreaWard" placeholder="e.g. Ward 29 - West Zone" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Population (Citizens)</label>
+                    <input type="number" id="newAreaPop" min="1" placeholder="e.g. 19500" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('areaModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 rounded-xl shadow">Save Area</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Register Vehicle -->
+    <div id="vehicleModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="font-bold text-base text-slate-800">Register Collection Vehicle</h4>
+                <button onclick="closeModal('vehicleModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleVehicleSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Registration Number</label>
+                    <input type="text" id="newVehNum" placeholder="e.g. TN-33-DZ-5555" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Vehicle Type</label>
+                    <select id="newVehType" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <option value="Compactor Heavy Truck">Compactor Heavy Truck (6000 kg)</option>
+                        <option value="Hydraulic Tipper Truck">Hydraulic Tipper Truck (4500 kg)</option>
+                        <option value="Mini Tipper LCV">Mini Tipper LCV (2500 kg)</option>
+                        <option value="Electric Waste Cart">Electric Waste Cart (1200 kg)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Payload Capacity (kg)</label>
+                    <input type="number" id="newVehCap" min="100" placeholder="e.g. 5000" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('vehicleModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 rounded-xl shadow">Register Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Schedule Task -->
+    <div id="taskModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="font-bold text-base text-slate-800">Schedule Collection Task</h4>
+                <button onclick="closeModal('taskModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleTaskSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Target Residential Area</label>
+                    <select id="modalAreaSelect" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Assigned Vehicle</label>
+                    <select id="modalVehicleSelect" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Collection Date</label>
+                    <input type="date" id="modalTaskDate" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeModal('taskModal')" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-teal-700 hover:bg-teal-800 rounded-xl shadow">Schedule Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <div>
+                © 2026-2027 <strong>Velalar College of Engineering and Technology, Erode - 12</strong> | Department of IT
+            </div>
+            <div>
+                Developed by <strong>DHARANI K K</strong> (Register No.: 23)
+            </div>
+        </div>
+    </footer>
+
+    <!-- Client-Side State & Logic -->
+    <script>
+        // Seed dataset for standalone mode (works even without backend running!)
+        const localState = {
+            areas: [
+                { area_id: 1, area_name: 'Perundurai Road Extension', ward_location: 'Ward 04 - West Zone', population: 18500, total_waste_kg: 14940.0 },
+                { area_id: 2, area_name: 'Brough Road Commercial-Res', ward_location: 'Ward 12 - Central Zone', population: 24200, total_waste_kg: 10750.0 },
+                { area_id: 3, area_name: 'Thindal Hills Enclave', ward_location: 'Ward 18 - South-West Zone', population: 15800, total_waste_kg: 4340.0 },
+                { area_id: 4, area_name: 'Solar Urban Nagar', ward_location: 'Ward 22 - South Zone', population: 21400, total_waste_kg: 7970.0 },
+                { area_id: 5, area_name: 'Surampatti Junction Colony', ward_location: 'Ward 08 - South-Central Zone', population: 28900, total_waste_kg: 11700.0 },
+                { area_id: 6, area_name: 'Veerappanchatram Town', ward_location: 'Ward 02 - North Zone', population: 32500, total_waste_kg: 12000.0 },
+                { area_id: 7, area_name: 'Rangampalayam Layout', ward_location: 'Ward 15 - East Zone', population: 14200, total_waste_kg: 2120.0 },
+                { area_id: 8, area_name: 'Kasipalayam Riverside Ward', ward_location: 'Ward 19 - East Zone', population: 19600, total_waste_kg: 7700.0 },
+                { area_id: 9, area_name: 'Kollampalayam Bypass Area', ward_location: 'Ward 27 - South-East Zone', population: 17300, total_waste_kg: 4590.0 },
+                { area_id: 10, area_name: 'Chithode Satellite Colony', ward_location: 'Ward 33 - Outer North Zone', population: 11800, total_waste_kg: 2930.0 }
+            ],
+            vehicles: [
+                { vehicle_id: 1, vehicle_number: 'TN-33-AX-1011', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 2, vehicle_number: 'TN-33-AX-1012', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 3, vehicle_number: 'TN-33-BT-2021', vehicle_type: 'Hydraulic Tipper Truck', capacity_kg: 4500.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 4, vehicle_number: 'TN-33-BT-2022', vehicle_type: 'Hydraulic Tipper Truck', capacity_kg: 4500.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 5, vehicle_number: 'TN-33-CM-3031', vehicle_type: 'Mini Tipper LCV', capacity_kg: 2500.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 6, vehicle_number: 'TN-33-CM-3032', vehicle_type: 'Mini Tipper LCV', capacity_kg: 2500.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 7, vehicle_number: 'TN-33-EV-4041', vehicle_type: 'Electric Waste Cart', capacity_kg: 1200.0, operational_status: 'AVAILABLE' },
+                { vehicle_id: 8, vehicle_number: 'TN-33-EV-4042', vehicle_type: 'Electric Waste Cart', capacity_kg: 1200.0, operational_status: 'MAINTENANCE' }
+            ],
+            tasks: [
+                { task_id: 101, area_id: 1, area_name: 'Perundurai Road Extension', vehicle_id: 1, vehicle_number: 'TN-33-AX-1011', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000, scheduled_date: '2026-11-10', status: 'COMPLETED', total_collected_kg: 4950.0, utilization_pct: 82.5 },
+                { task_id: 102, area_id: 2, area_name: 'Brough Road Commercial-Res', vehicle_id: 2, vehicle_number: 'TN-33-AX-1012', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000, scheduled_date: '2026-11-10', status: 'COMPLETED', total_collected_kg: 5400.0, utilization_pct: 90.0 },
+                { task_id: 103, area_id: 3, area_name: 'Thindal Hills Enclave', vehicle_id: 5, vehicle_number: 'TN-33-CM-3031', vehicle_type: 'Mini Tipper LCV', capacity_kg: 2500, scheduled_date: '2026-11-10', status: 'COMPLETED', total_collected_kg: 2150.0, utilization_pct: 86.0 },
+                { task_id: 104, area_id: 4, area_name: 'Solar Urban Nagar', vehicle_id: 3, vehicle_number: 'TN-33-BT-2021', vehicle_type: 'Hydraulic Tipper Truck', capacity_kg: 4500, scheduled_date: '2026-11-10', status: 'COMPLETED', total_collected_kg: 3950.0, utilization_pct: 87.8 },
+                { task_id: 105, area_id: 5, area_name: 'Surampatti Junction Colony', vehicle_id: 2, vehicle_number: 'TN-33-AX-1012', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000, scheduled_date: '2026-11-11', status: 'COMPLETED', total_collected_kg: 5800.0, utilization_pct: 96.7 },
+                { task_id: 106, area_id: 6, area_name: 'Veerappanchatram Town', vehicle_id: 1, vehicle_number: 'TN-33-AX-1011', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000, scheduled_date: '2026-11-11', status: 'COMPLETED', total_collected_kg: 5950.0, utilization_pct: 99.2 },
+                { task_id: 121, area_id: 1, area_name: 'Perundurai Road Extension', vehicle_id: 3, vehicle_number: 'TN-33-BT-2021', vehicle_type: 'Hydraulic Tipper Truck', capacity_kg: 4500, scheduled_date: '2026-11-16', status: 'IN_PROGRESS', total_collected_kg: 2700.0, utilization_pct: 60.0 },
+                { task_id: 123, area_id: 5, area_name: 'Surampatti Junction Colony', vehicle_id: 2, vehicle_number: 'TN-33-AX-1012', vehicle_type: 'Compactor Heavy Truck', capacity_kg: 6000, scheduled_date: '2026-11-16', status: 'SCHEDULED', total_collected_kg: 0.0, utilization_pct: 0.0 }
+            ]
+        };
+
+        let catChartInstance = null;
+        let areaChartInstance = null;
+        let trendChartInstance = null;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.classList.remove('bg-white/20', 'text-white', 'shadow-sm');
+                el.classList.add('text-teal-100');
+            });
+
+            const activeContent = document.getElementById('tab-' + tabId);
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white/20', 'text-white', 'shadow-sm');
+                activeBtn.classList.remove('text-teal-100');
+            }
+
+            if (tabId === 'dashboard') {
+                renderCharts();
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        // Render Tables
+        function renderAreasTable() {
+            const tbody = document.getElementById('areasTableBody');
+            tbody.innerHTML = '';
+            localState.areas.forEach(a => {
+                const perCapita = a.population > 0 ? (a.total_waste_kg / a.population).toFixed(4) : '0.0000';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-5 py-3 font-bold text-slate-800">#${a.area_id}</td>
+                        <td class="px-5 py-3 font-semibold text-slate-800">${a.area_name}</td>
+                        <td class="px-5 py-3 text-slate-500">${a.ward_location}</td>
+                        <td class="px-5 py-3 text-right font-medium">${a.population.toLocaleString()}</td>
+                        <td class="px-5 py-3 text-right font-bold text-teal-700">${a.total_waste_kg.toLocaleString()} kg</td>
+                        <td class="px-5 py-3 text-right text-slate-600">${perCapita}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderVehiclesCards() {
+            const grid = document.getElementById('vehicleCardsGrid');
+            grid.innerHTML = '';
+            localState.vehicles.forEach(v => {
+                const isAvail = v.operational_status === 'AVAILABLE';
+                grid.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-400">ID #${v.vehicle_id}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isAvail ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-rose-100 text-rose-800 border border-rose-200'}">${v.operational_status}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-base">${v.vehicle_number}</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">${v.vehicle_type}</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                            <span class="text-slate-500">Rated Capacity:</span>
+                            <span class="font-bold text-teal-700 text-sm">${v.capacity_kg.toLocaleString()} kg</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderTasksTable() {
+            const tbody = document.getElementById('tasksTableBody');
+            tbody.innerHTML = '';
+            localState.tasks.forEach(t => {
+                let badgeClass = 'bg-slate-100 text-slate-700';
+                if (t.status === 'COMPLETED') badgeClass = 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+                if (t.status === 'IN_PROGRESS') badgeClass = 'bg-amber-100 text-amber-800 border border-amber-200';
+                if (t.status === 'SCHEDULED') badgeClass = 'bg-blue-100 text-blue-800 border border-blue-200';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-5 py-3 font-bold text-slate-800">#${t.task_id}</td>
+                        <td class="px-5 py-3 text-slate-600">${t.scheduled_date}</td>
+                        <td class="px-5 py-3 font-semibold text-slate-800">${t.area_name}</td>
+                        <td class="px-5 py-3 text-slate-600">${t.vehicle_number}</td>
+                        <td class="px-5 py-3 text-right font-bold text-slate-800">${t.total_collected_kg.toLocaleString()} kg</td>
+                        <td class="px-5 py-3">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-16 bg-slate-200 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-teal-600 h-full" style="width: ${Math.min(100, t.utilization_pct)}%"></div>
+                                </div>
+                                <span class="text-xs font-semibold ${t.utilization_pct > 100 ? 'text-rose-600 font-bold' : 'text-slate-600'}">${t.utilization_pct}%</span>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3"><span class="text-xs font-bold px-2.5 py-1 rounded-full ${badgeClass}">${t.status}</span></td>
+                        <td class="px-5 py-3 text-center">
+                            ${t.status !== 'COMPLETED' ? `
+                                <button onclick="markTaskCompleted(${t.task_id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-2.5 py-1 rounded-lg transition shadow-sm">
+                                    Complete
+                                </button>
+                            ` : `<span class="text-xs text-slate-400 font-medium">Done</span>`}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Populate Task select dropdown in Waste Logging form
+            const select = document.getElementById('logTaskId');
+            select.innerHTML = '<option value="">-- Choose Collection Task --</option>';
+            localState.tasks.forEach(t => {
+                select.innerHTML += `<option value="${t.task_id}">Task #${t.task_id} - ${t.area_name} (${t.vehicle_number})</option>`;
+            });
+
+            // Populate Modal selects
+            const mArea = document.getElementById('modalAreaSelect');
+            mArea.innerHTML = '';
+            localState.areas.forEach(a => mArea.innerHTML += `<option value="${a.area_id}">${a.area_name}</option>`);
+
+            const mVeh = document.getElementById('modalVehicleSelect');
+            mVeh.innerHTML = '';
+            localState.vehicles.filter(v => v.operational_status === 'AVAILABLE').forEach(v => {
+                mVeh.innerHTML += `<option value="${v.vehicle_id}">${v.vehicle_number} - ${v.vehicle_type} (${v.capacity_kg} kg)</option>`;
+            });
+        }
+
+        function onTaskSelectChange() {
+            const taskId = parseInt(document.getElementById('logTaskId').value);
+            const task = localState.tasks.find(t => t.task_id === taskId);
+            if (!task) return;
+
+            document.getElementById('gaugeArea').innerText = task.area_name;
+            document.getElementById('gaugeVehicle').innerText = `${task.vehicle_number} (${task.vehicle_type})`;
+            document.getElementById('gaugeCapacity').innerText = `${task.capacity_kg.toLocaleString()} kg`;
+            document.getElementById('gaugeCurrentLoad').innerText = `${task.total_collected_kg.toLocaleString()} kg`;
+
+            calculateLivePayload();
+        }
+
+        function calculateLivePayload() {
+            const taskId = parseInt(document.getElementById('logTaskId').value);
+            const task = localState.tasks.find(t => t.task_id === taskId);
+            if (!task) return;
+
+            const inputWeight = parseFloat(document.getElementById('logQuantity').value) || 0;
+            const updatedLoad = task.total_collected_kg + inputWeight;
+            const pct = ((updatedLoad / task.capacity_kg) * 100).toFixed(1);
+
+            document.getElementById('gaugePercent').innerText = `${pct}%`;
+            const bar = document.getElementById('gaugeBar');
+            bar.style.width = `${Math.min(100, pct)}%`;
+
+            const alertBox = document.getElementById('overloadAlertBox');
+            const badge = document.getElementById('overloadBadge');
+
+            if (pct > 100.0) {
+                bar.className = 'bg-rose-600 h-full transition-all duration-500 rounded-full animate-pulse';
+                alertBox.classList.remove('hidden');
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300 animate-bounce';
+                badge.innerText = 'OVERLOADED';
+            } else if (pct >= 90.0) {
+                bar.className = 'bg-amber-500 h-full transition-all duration-500 rounded-full';
+                alertBox.classList.add('hidden');
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300';
+                badge.innerText = 'OPTIMAL CAPACITY';
+            } else {
+                bar.className = 'bg-teal-600 h-full transition-all duration-500 rounded-full';
+                alertBox.classList.add('hidden');
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+                badge.innerText = 'NORMAL';
+            }
+        }
+
+        function handleWasteSubmit(e) {
+            e.preventDefault();
+            const taskId = parseInt(document.getElementById('logTaskId').value);
+            const qty = parseFloat(document.getElementById('logQuantity').value);
+            const task = localState.tasks.find(t => t.task_id === taskId);
+            if (!task) return;
+
+            task.total_collected_kg += qty;
+            task.utilization_pct = parseFloat(((task.total_collected_kg / task.capacity_kg) * 100).toFixed(1));
+            if (task.status === 'SCHEDULED') task.status = 'IN_PROGRESS';
+
+            // Also update area total
+            const area = localState.areas.find(a => a.area_id === task.area_id);
+            if (area) area.total_waste_kg += qty;
+
+            alert(`[SUCCESS] ${qty.toLocaleString()} kg waste successfully logged!\nUpdated Vehicle Payload Utilization: ${task.utilization_pct}%`);
+            document.getElementById('logQuantity').value = '';
+
+            renderTasksTable();
+            renderAreasTable();
+            onTaskSelectChange();
+        }
+
+        function markTaskCompleted(taskId) {
+            const task = localState.tasks.find(t => t.task_id === taskId);
+            if (task) {
+                task.status = 'COMPLETED';
+                renderTasksTable();
+            }
+        }
+
+        function handleAreaSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('newAreaName').value;
+            const ward = document.getElementById('newAreaWard').value;
+            const pop = parseInt(document.getElementById('newAreaPop').value);
+
+            localState.areas.push({
+                area_id: localState.areas.length + 1,
+                area_name: name,
+                ward_location: ward,
+                population: pop,
+                total_waste_kg: 0.0
+            });
+            closeModal('areaModal');
+            renderAreasTable();
+            renderTasksTable();
+            alert(`Area "${name}" registered successfully!`);
+        }
+
+        function handleVehicleSubmit(e) {
+            e.preventDefault();
+            const num = document.getElementById('newVehNum').value;
+            const type = document.getElementById('newVehType').value;
+            const cap = parseFloat(document.getElementById('newVehCap').value);
+
+            localState.vehicles.push({
+                vehicle_id: localState.vehicles.length + 1,
+                vehicle_number: num,
+                vehicle_type: type,
+                capacity_kg: cap,
+                operational_status: 'AVAILABLE'
+            });
+            closeModal('vehicleModal');
+            renderVehiclesCards();
+            renderTasksTable();
+            alert(`Vehicle "${num}" registered successfully!`);
+        }
+
+        function handleTaskSubmit(e) {
+            e.preventDefault();
+            const aId = parseInt(document.getElementById('modalAreaSelect').value);
+            const vId = parseInt(document.getElementById('modalVehicleSelect').value);
+            const date = document.getElementById('modalTaskDate').value;
+
+            const area = localState.areas.find(a => a.area_id === aId);
+            const veh = localState.vehicles.find(v => v.vehicle_id === vId);
+
+            localState.tasks.unshift({
+                task_id: 125 + localState.tasks.length,
+                area_id: aId,
+                area_name: area.area_name,
+                vehicle_id: vId,
+                vehicle_number: veh.vehicle_number,
+                vehicle_type: veh.vehicle_type,
+                capacity_kg: veh.capacity_kg,
+                scheduled_date: date,
+                status: 'SCHEDULED',
+                total_collected_kg: 0.0,
+                utilization_pct: 0.0
+            });
+
+            closeModal('taskModal');
+            renderTasksTable();
+            alert('Collection Task scheduled successfully!');
+        }
+
+        // Initialize Chart.js
+        function renderCharts() {
+            // Category Donut Chart
+            const catCtx = document.getElementById('categoryChart').getContext('2d');
+            if (catChartInstance) catChartInstance.destroy();
+            catChartInstance = new Chart(catCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Biodegradable', 'Recyclable', 'Non-Recyclable', 'Hazardous'],
+                    datasets: [{
+                        data: [44910, 21490, 9275, 965],
+                        backgroundColor: ['#10b981', '#3b82f6', '#94a3b8', '#f43f5e'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    cutout: '72%'
+                }
+            });
+
+            // Area Bar Chart
+            const areaCtx = document.getElementById('areaBarChart').getContext('2d');
+            if (areaChartInstance) areaChartInstance.destroy();
+            areaChartInstance = new Chart(areaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Veerappanchatram', 'Surampatti', 'Perundurai Rd', 'Brough Road', 'Solar Urban', 'Kasipalayam'],
+                    datasets: [{
+                        label: 'Total Waste (kg)',
+                        data: [12000, 11700, 14940, 10750, 7970, 7700],
+                        backgroundColor: '#0f766e',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                    }
+                }
+            });
+
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            if (trendChartInstance) trendChartInstance.destroy();
+            trendChartInstance = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Nov 10', 'Nov 11', 'Nov 12', 'Nov 13', 'Nov 14', 'Nov 15', 'Nov 16'],
+                    datasets: [
+                        { label: 'Biodegradable (kg)', data: [9400, 9850, 5600, 9380, 9920, 5840, 4200], borderColor: '#10b981', backgroundColor: '#10b98120', fill: true, tension: 0.3 },
+                        { label: 'Recyclable (kg)', data: [4670, 4580, 2710, 4710, 4610, 2900, 2100], borderColor: '#3b82f6', tension: 0.3 },
+                        { label: 'Non-Recyclable (kg)', data: [2170, 2010, 1205, 2170, 2030, 1260, 900], borderColor: '#94a3b8', tension: 0.3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        // On Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAreasTable();
+            renderVehiclesCards();
+            renderTasksTable();
+            renderCharts();
+        });
+    </script>
+</body>
+</html>
