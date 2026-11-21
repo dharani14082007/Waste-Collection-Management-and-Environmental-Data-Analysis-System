@@ -1,0 +1,80 @@
+@startuml waterfall_model
+!theme plain
+title Waste Collection Management System – Waterfall SDLC Model
+skinparam backgroundColor #FAFAFA
+skinparam sequenceMessageAlign center
+skinparam roundcorner 10
+skinparam defaultFontSize 12
+
+skinparam state {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+  FontColor #1B5E20
+  ArrowColor #1565C0
+}
+
+state "1. Requirements Analysis & Specification" as P1 {
+  state "• Scenario 23 Elicitation\n• Define Functional (FR-01 to FR-07)\n• Define Non-Functional Requirements\n• Output: IEEE 830 SRS Document" as P1_Desc #FFFFFF
+}
+
+state "2. System & Software Design" as P2 {
+  state "• 3-Tier System Architecture\n• UML Use Case & Class Diagrams\n• Relational Schema & 3NF Normalization\n• Output: Design Specifications & Diagrams" as P2_Desc #FFFFFF
+}
+
+state "3. Implementation (Coding)" as P3 {
+  state "• MySQL Database Schema, Views & Seed Data\n• Java 17 Console Application (JDBC / DAO)\n• Python 3 Analytics Pipeline (Pandas / Seaborn)\n• Output: Source Code & Compiled JAR" as P3_Desc #FFFFFF
+}
+
+state "4. Integration & Testing" as P4 {
+  state "• Unit Testing with JUnit 5 & Mockito (39 Tests)\n• Black Box & White Box System Testing\n• 35 Documented Test Cases (FR Traceability)\n• Output: Test Plan & Test Execution Reports" as P4_Desc #FFFFFF
+}
+
+state "5. Deployment & Maintenance" as P5 {
+  state "• Automated Launch Scripts (run.bat)\n• Database Setup Scripts & Documentation\n• GitHub Repository Delivery\n• Maintenance (Corrective, Adaptive, Perfective)" as P5_Desc #FFFFFF
+}
+
+[*] --> P1
+P1 --> P2 : SRS Baselined
+P2 --> P3 : Design Approved
+P3 --> P4 : Code Compiled & DB Loaded
+P4 --> P5 : All Tests Passed (100% Pass)
+P5 --> [*]
+
+P4 ..> P3 : Defect Correction
+P3 ..> P2 : Design Refinement
+P2 ..> P1 : Requirement Clarification
+
+note right of P1
+  <b>Deliverable:</b>
+  docs/SRS.md
+end note
+
+note right of P2
+  <b>Deliverables:</b>
+  • docs/diagrams/*.puml
+  • database/schema.sql
+  • database/normalization.md
+end note
+
+note right of P3
+  <b>Deliverables:</b>
+  • java-app/src/
+  • python-analysis/
+  • database/seed_data.sql
+end note
+
+note right of P4
+  <b>Deliverables:</b>
+  • testing/test_cases.md
+  • testing/test_plan.md
+  • JUnit test suites
+end note
+
+note right of P5
+  <b>Deliverables:</b>
+  • README.md
+  • run.bat / setup-env.ps1
+  • GitHub Repository
+end note
+
+@enduml
