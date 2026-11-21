@@ -1,0 +1,135 @@
+@startuml class_diagram
+!theme plain
+title Waste Collection Management System – UML Class Diagram
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam classAttributeIconSize 0
+
+package "com.waste.model" {
+  class Area {
+    - int areaId
+    - String areaName
+    - String wardLocation
+    - int population
+    + getAreaId(): int
+    + getAreaName(): String
+    + getWardLocation(): String
+    + getPopulation(): int
+    + setPopulation(int): void
+  }
+
+  class Vehicle {
+    - int vehicleId
+    - String vehicleNumber
+    - String vehicleType
+    - double capacityKg
+    - String status
+    + getVehicleId(): int
+    + getVehicleNumber(): String
+    + getVehicleType(): String
+    + getCapacityKg(): double
+    + getStatus(): String
+    + setStatus(String): void
+  }
+
+  enum CollectionStatus {
+    SCHEDULED
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+  }
+
+  enum WasteCategory {
+    BIODEGRADABLE
+    RECYCLABLE
+    NON_RECYCLABLE
+    HAZARDOUS
+  }
+
+  class WasteRecord {
+    - int recordId
+    - int taskId
+    - WasteCategory category
+    - double quantityKg
+    - String recordedAt
+    + getRecordId(): int
+    + getTaskId(): int
+    + getCategory(): WasteCategory
+    + getQuantityKg(): double
+  }
+
+  class CollectionTask {
+    - int taskId
+    - int areaId
+    - int vehicleId
+    - String scheduledDate
+    - CollectionStatus status
+    - List<WasteRecord> wasteRecords
+    + getTaskId(): int
+    + getAreaId(): int
+    + getVehicleId(): int
+    + getScheduledDate(): String
+    + getStatus(): CollectionStatus
+    + setStatus(CollectionStatus): void
+    + addWasteRecord(WasteRecord): void
+    + getTotalWasteKg(): double
+  }
+}
+
+package "com.waste.dao" {
+  interface AreaDAO {
+    + insert(Area): boolean
+    + findById(int): Area
+    + findAll(): List<Area>
+    + update(Area): boolean
+    + delete(int): boolean
+  }
+
+  interface VehicleDAO {
+    + insert(Vehicle): boolean
+    + findById(int): Vehicle
+    + findAll(): List<Vehicle>
+    + update(Vehicle): boolean
+    + delete(int): boolean
+  }
+
+  interface CollectionDAO {
+    + insert(CollectionTask): int
+    + findById(int): CollectionTask
+    + updateStatus(int, CollectionStatus): boolean
+    + insertWasteRecord(WasteRecord): boolean
+    + getRecordsByTaskId(int): List<WasteRecord>
+  }
+}
+
+package "com.waste.service" {
+  class WasteManagementService {
+    - AreaDAO areaDAO
+    - VehicleDAO vehicleDAO
+    - CollectionDAO collectionDAO
+    + registerArea(Area): boolean
+    + registerVehicle(Vehicle): boolean
+    + scheduleCollection(int, int, String): CollectionTask
+    + updateTaskStatus(int, CollectionStatus): boolean
+    + recordWasteCollection(int, WasteCategory, double): boolean
+    + checkVehicleCapacityWarning(int): double
+  }
+
+  class ReportService {
+    + getAreaWiseSummary(): List
+    + getVehicleUtilizationReport(): List
+    + getCompletionMetrics(): Map
+  }
+}
+
+Area "1" <-- "0..*" CollectionTask : assigned to
+Vehicle "1" <-- "0..*" CollectionTask : operated by
+CollectionTask "1" *-- "0..*" WasteRecord : contains
+CollectionTask o-- CollectionStatus : has status
+WasteRecord o-- WasteCategory : categorized by
+
+WasteManagementService --> AreaDAO
+WasteManagementService --> VehicleDAO
+WasteManagementService --> CollectionDAO
+ReportService --> CollectionDAO
+@enduml

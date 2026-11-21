@@ -1,0 +1,55 @@
+@startuml activity_diagram
+!theme plain
+title Waste Collection Management System – UML Activity Diagram
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 10
+skinparam activity {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+  FontColor #1B5E20
+}
+
+start
+:Administrator creates residential areas and registers vehicles;
+:Schedule Waste Collection Activity for Area;
+
+partition "Vehicle Assignment & Verification" {
+  :Select vehicle for collection date;
+  if (Is vehicle already booked on this date?) then (yes)
+    #FFCDD2:Reject Assignment\n(Double-Booking Prevented);
+    stop
+  else (no)
+    :Assign vehicle to collection task;
+    :Set task status to SCHEDULED;
+  endif
+}
+
+partition "Field Execution & Status Tracking" {
+  :Driver/Operator initiates collection route;
+  :Update status to IN_PROGRESS;
+  :Collect waste at residential stops;
+  :Segregate waste by categories:\n(Biodegradable, Recyclable, Non-Recyclable);
+  :Weigh segregated waste categories;
+  :Record quantities in system (kg);
+  
+  if (Total payload > Vehicle Capacity?) then (yes)
+    #FFF9C4:Trigger Vehicle Overload Warning (>95%);
+  else (no)
+    :Payload within safe operational limits;
+  endif
+  
+  :Complete collection run;
+  :Update status to COMPLETED;
+}
+
+partition "Database Persistence & Analytics" {
+  :Commit transaction atomically to MySQL (ACID);
+  :Update SQL Views (v_area_collection, v_vehicle_utilization);
+  :Python Data Science pipeline extracts live database records;
+  :Preprocess & clean data (handle nulls, IQR outlier detection);
+  :Generate 8 EDA visualization charts (Matplotlib & Seaborn);
+  :Publish operational & environmental analytics reports;
+}
+
+stop
+@enduml

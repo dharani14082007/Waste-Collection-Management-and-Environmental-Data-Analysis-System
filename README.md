@@ -364,6 +364,146 @@ flowchart TD
 | **Vehicle Operator** | UC-05 (Record Waste), UC-06 (Categorize), UC-07 (Track Status) |
 | **Environmental Analyst** | UC-09 (Reports), UC-10 (Preprocess), UC-11 (Visualizations) |
 
+#### 2.6 UML Class Diagram
+Models classes, attributes, methods, enumerations, and relationships across model, DAO, and service layers:
+
+```mermaid
+classDiagram
+    class Area {
+        -int areaId
+        -String areaName
+        -String wardLocation
+        -int population
+        +getAreaId() int
+        +getAreaName() String
+        +getWardLocation() String
+        +getPopulation() int
+        +setPopulation(int) void
+        +toString() String
+    }
+
+    class Vehicle {
+        -int vehicleId
+        -String vehicleNumber
+        -String vehicleType
+        -double capacityKg
+        -String status
+        +getVehicleId() int
+        +getVehicleNumber() String
+        +getVehicleType() String
+        +getCapacityKg() double
+        +getStatus() String
+        +setStatus(String) void
+        +toString() String
+    }
+
+    class CollectionStatus {
+        <<enumeration>>
+        SCHEDULED
+        IN_PROGRESS
+        COMPLETED
+        CANCELLED
+    }
+
+    class WasteCategory {
+        <<enumeration>>
+        BIODEGRADABLE
+        RECYCLABLE
+        NON_RECYCLABLE
+        HAZARDOUS
+    }
+
+    class WasteRecord {
+        -int recordId
+        -int taskId
+        -WasteCategory category
+        -double quantityKg
+        -String recordedAt
+        +getRecordId() int
+        +getTaskId() int
+        +getCategory() WasteCategory
+        +getQuantityKg() double
+        +toString() String
+    }
+
+    class CollectionTask {
+        -int taskId
+        -int areaId
+        -int vehicleId
+        -String scheduledDate
+        -CollectionStatus status
+        -List~WasteRecord~ wasteRecords
+        +getTaskId() int
+        +getAreaId() int
+        +getVehicleId() int
+        +getScheduledDate() String
+        +getStatus() CollectionStatus
+        +setStatus(CollectionStatus) void
+        +addWasteRecord(WasteRecord) void
+        +getTotalWasteKg() double
+        +toString() String
+    }
+
+    class WasteManagementService {
+        -AreaDAO areaDAO
+        -VehicleDAO vehicleDAO
+        -CollectionDAO collectionDAO
+        +registerArea(Area) boolean
+        +registerVehicle(Vehicle) boolean
+        +scheduleCollection(int, int, String) CollectionTask
+        +updateTaskStatus(int, CollectionStatus) boolean
+        +recordWasteCollection(int, WasteCategory, double) boolean
+        +checkVehicleCapacityWarning(int) double
+    }
+
+    class ReportService {
+        +getAreaWiseSummary() List
+        +getVehicleUtilizationReport() List
+        +getCompletionMetrics() Map
+    }
+
+    Area "1" <-- "0..*" CollectionTask : assigned to
+    Vehicle "1" <-- "0..*" CollectionTask : operated by
+    CollectionTask "1" *-- "0..*" WasteRecord : contains
+    CollectionTask o-- CollectionStatus : has status
+    WasteRecord o-- WasteCategory : categorized by
+    WasteManagementService --> Area : manages
+    WasteManagementService --> Vehicle : manages
+    WasteManagementService --> CollectionTask : orchestrates
+    ReportService --> CollectionTask : queries metrics
+```
+
+#### 2.7 UML Activity Diagram
+Models the end-to-end municipal waste management operational flow, double-booking prevention, payload limit checks, status state transitions, and Python analytics:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> RegArea[Admin Registers Areas & Vehicles]
+    RegArea --> Sched[Schedule Waste Collection Task]
+    Sched --> CheckBook{Is Vehicle Booked\non Same Date?}
+
+    CheckBook -- Yes --> Reject[Reject Assignment\nValidationException] --> Sched
+    CheckBook -- No --> Assign[Assign Vehicle & Status = SCHEDULED]
+
+    Assign --> StartRoute[Driver Begins Route\nStatus = IN_PROGRESS]
+    StartRoute --> Collect[Collect Refuse at Residential Stops]
+    Collect --> Segregate[Segregate Waste into Categories:\nBiodegradable, Recyclable, Non-Recyclable]
+    Segregate --> Weigh[Weigh Segregated Waste kg]
+
+    Weigh --> CheckCap{Total Payload >\nRated Capacity?}
+    CheckCap -- Yes --> Alert[Trigger Overload Warning\nPayload > 95%] --> Record
+    CheckCap -- No --> Record[Record Waste Weights in System]
+
+    Record --> Complete[Driver Completes Route\nStatus = COMPLETED]
+    Complete --> DBCommit[(Commit Transaction to MySQL\nAtomicity Guaranteed)]
+
+    DBCommit --> Views[Update SQL Views & Summaries]
+    Views --> PyExtract[Python Module Extracts Live Records]
+    PyExtract --> Preprocess[Clean Data & Outlier Detection - IQR]
+    Preprocess --> Plot[Generate 8 EDA Charts\nMatplotlib & Seaborn]
+    Plot --> End([End Operational Cycle])
+```
+
 ---
 
 ### 🔷 UNIT III: SOFTWARE DESIGN
@@ -396,7 +536,59 @@ flowchart TD
 └─────────────────────────────────────────────┘
 ```
 
-#### 3.3 OOP Principles in Class Diagram
+#### 3.3 UML Component Diagram
+Illustrates software components, interfaces, database connections, and inter-component dependencies:
+
+```mermaid
+flowchart TD
+    subgraph Presentation_Tier ["Presentation Layer"]
+        CLI["[Java Console UI]\n(Menu System)"]
+        WebPortal["[Web Portal / Dashboard]\n(HTML5 / Chart.js)"]
+        Jupyter["[Jupyter Notebook]\n(CLI Dashboard)"]
+    end
+
+    subgraph Service_Tier ["Application & Business Logic Layer (Java)"]
+        Service["[WasteManagementService]"]
+        ReportService["[ReportService]"]
+        Validator["[InputValidator]"]
+        Models["[Domain Models]\n(Area, Vehicle, Task, Record)"]
+    end
+
+    subgraph DAO_Tier ["Data Access Layer (DAO & Connectors)"]
+        JavaDAO["[AreaDAO / VehicleDAO / CollectionDAO]\n(JDBC Implementation)"]
+        DBPool["[DBConnection Pool]"]
+        PyConnector["[mysql-connector-python]"]
+    end
+
+    subgraph DB_Tier ["Persistence Layer (RDBMS)"]
+        MySQL[("MySQL 8.0 Database\n(waste_management_db)\nTables & SQL Views")]
+    end
+
+    subgraph Analytics_Tier ["Analytics & Visualization Subsystem (Python)"]
+        Extract["[retrieve_data.py]"]
+        Preprocess["[preprocess.py]\n(Pandas / NumPy IQR)"]
+        Visualize["[visualize.py]\n(8 Charts - Matplotlib/Seaborn)"]
+    end
+
+    CLI --> Service
+    WebPortal --> Service
+    Jupyter --> PyConnector
+
+    Service --> Validator
+    Service --> Models
+    Service --> JavaDAO
+    ReportService --> JavaDAO
+
+    JavaDAO --> DBPool
+    DBPool -->|JDBC :3306| MySQL
+
+    PyConnector -->|SQL Queries :3306| MySQL
+    Extract --> PyConnector
+    Preprocess --> Extract
+    Visualize --> Preprocess
+```
+
+#### 3.4 OOP Principles in Class Diagram
 
 | Principle | How Applied |
 |-----------|-------------|

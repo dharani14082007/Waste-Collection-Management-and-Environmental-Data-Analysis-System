@@ -1,0 +1,56 @@
+@startuml component_diagram
+!theme plain
+title Waste Collection Management System – UML Component Diagram
+skinparam backgroundColor #FAFAFA
+skinparam roundcorner 8
+skinparam componentStyle uml2
+
+package "Presentation Layer" {
+  [Java Console UI\n(Menu System)] as ConsoleUI
+  [Web Portal / Dashboard\n(Flask / HTML5 / Chart.js)] as WebPortal
+  [Jupyter Notebook\n(CLI Dashboard)] as Jupyter
+}
+
+package "Application & Business Logic Layer (Java)" {
+  [WasteManagementService] as ServiceComp
+  [ReportService] as ReportComp
+  [InputValidator] as ValidatorComp
+  [Domain Models\n(Area, Vehicle, Task, Record)] as ModelComp
+}
+
+package "Data Access Layer (DAO & Connectors)" {
+  [AreaDAO / VehicleDAO / CollectionDAO\n(JDBC Implementation)] as JavaDAO
+  [Database Connection Pool\n(DBConnection)] as DBPool
+  [Python Data Connector\n(mysql-connector / SQLAlchemy)] as PythonConn
+}
+
+package "Persistence Layer (RDBMS)" {
+  database "MySQL 8.0 Database\n(waste_management_db)" as MySQLDB {
+    [Tables: areas, vehicles, tasks, records]
+    [SQL Views: v_area_summary, v_utilization]
+  }
+}
+
+package "Analytics & Visualization Subsystem (Python)" {
+  [Data Extraction Module\n(retrieve_data.py)] as ExtractComp
+  [Data Cleaning & Wrangling\n(preprocess.py - Pandas/NumPy)] as CleanComp
+  [Visualization Engine\n(visualize.py - Matplotlib/Seaborn)] as VizComp
+}
+
+ConsoleUI ..> ServiceComp : invokes
+WebPortal ..> ServiceComp : HTTP / REST
+Jupyter ..> PythonConn : queries
+
+ServiceComp ..> ValidatorComp : validates input
+ServiceComp ..> ModelComp : manipulates
+ServiceComp ..> JavaDAO : calls CRUD
+ReportComp ..> JavaDAO : queries metrics
+
+JavaDAO ..> DBPool : gets connection
+DBPool ..> MySQLDB : JDBC (Port 3306)
+
+PythonConn ..> MySQLDB : TCP/IP SQL Read (Port 3306)
+ExtractComp ..> PythonConn : retrieves DataFrames
+CleanComp ..> ExtractComp : transforms
+VizComp ..> CleanComp : plots 8 Charts
+@enduml
