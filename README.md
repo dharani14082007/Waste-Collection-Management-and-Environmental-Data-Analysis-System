@@ -3,6 +3,7 @@
 [![Academic Year](https://img.shields.io/badge/Academic%20Year-2026--27%20(Odd)-blue.svg)](#)
 [![Department](https://img.shields.io/badge/Department-Information%20Technology-green.svg)](#)
 [![Institution](https://img.shields.io/badge/VCET-Erode--12-orange.svg)](#)
+[![SDLC](https://img.shields.io/badge/SDLC-Classical%20Waterfall%20Model-brightgreen.svg)](#)
 [![Java](https://img.shields.io/badge/Java-SE%2011%2B-red.svg)](#)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-yellow.svg)](#)
 [![Database](https://img.shields.io/badge/Database-SQLite%20%7C%20MySQL-blue.svg)](#)
@@ -242,18 +243,59 @@ Communication → Planning → Modeling → Construction → Deployment
 | **Construction** | Built Java app, SQL DB, Python analysis, Web dashboard |
 | **Deployment** | Pushed to GitHub, created `run_project.bat` launcher |
 
-#### 1.4 Waterfall Model (Used in This Project)
-Sequential, linear approach — each phase completes before the next begins:
+#### 1.4 Classical Waterfall Model (Prescriptive Process Model)
+
+This project strictly implements the **Classical Waterfall Model** (Linear Sequential Life Cycle Model) as prescribed in Unit I of the **25ITT33 Software Engineering** syllabus. Development proceeds through ordered, disciplined phases where each phase establishes a formal baselined deliverable before proceeding to the next.
+
+```mermaid
+flowchart TD
+    classDef phase fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20,font-weight:bold;
+    classDef deliverable fill:#E3F2FD,stroke:#1565C0,stroke-width:1px,color:#0D47A1;
+
+    P1["1. Requirements Analysis & Specification"]:::phase
+    D1["Deliverable: IEEE 830 SRS Document (docs/SRS.md)"]:::deliverable
+    
+    P2["2. System & Software Design"]:::phase
+    D2["Deliverables: 3-Tier Architecture, UML Diagrams, 3NF ER Model (docs/SYSTEM_DESIGN.md)"]:::deliverable
+    
+    P3["3. Implementation & Unit Testing"]:::phase
+    D3["Deliverables: Java 17 JDBC App, MySQL 8.0 DB, Python 3 Analytics"]:::deliverable
+    
+    P4["4. Integration & System Testing"]:::phase
+    D4["Deliverables: Test Plan, Documented Test Cases, Verification Reports"]:::deliverable
+    
+    P5["5. Deployment & Maintenance"]:::phase
+    D5["Deliverables: Production Launcher (run_project.bat), Web Portal, GitHub Release"]:::deliverable
+
+    P1 --> D1 --> P2
+    P2 --> D2 --> P3
+    P3 --> D3 --> P4
+    P4 --> D4 --> P5
+    
+    P4 -.->|"Defect Rectification"| P3
+    P3 -.->|"Design Clarification"| P2
+    P2 -.->|"Requirement Revision"| P1
 ```
-Requirements Analysis → System Design → Implementation → Testing → Deployment
-```
-| Phase | Deliverable |
-|-------|------------|
-| Requirements | `docs/SRS.md` |
-| Design | `docs/SYSTEM_DESIGN.md` |
-| Implementation | Java app + Python + SQL |
-| Testing | 13 test cases (100% PASS) |
-| Deployment | GitHub repository |
+
+##### Detailed Phase Breakdown & Deliverables
+
+| Phase | Phase Name | Inputs | Key Engineering Activities | Baselined Deliverables |
+|:---|:---|:---|:---|:---|
+| **Phase 1** | **Requirements Analysis** | Scenario 23 brief from VCET Assessment | Elicitation with municipal stakeholders, scope definition, functional specification (FR-01 to FR-07), and non-functional constraints. | [`docs/SRS.md`](docs/SRS.md) (IEEE 830-1998 standard) |
+| **Phase 2** | **System & Software Design** | Approved SRS document | 3-tier architectural design, UML Use Case & Class modeling, ER modeling normalized to 3NF/BCNF. | [`docs/WATERFALL_MODEL.md`](docs/WATERFALL_MODEL.md)<br>[`docs/diagrams/waterfall_model.puml`](docs/diagrams/waterfall_model.puml)<br>[`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md)<br>[`docs/ER_DIAGRAM.md`](docs/ER_DIAGRAM.md) |
+| **Phase 3** | **Implementation (Coding)** | Design specifications & ER schemas | Relational schema creation with constraints and triggers; Java 17 DAO/Service layer with JDBC PreparedStatements; Python data analytics pipeline. | `java-app/src/`<br>`database/`<br>`python-analysis/`<br>`web-app/` |
+| **Phase 4** | **Integration & System Testing** | Compiled code & database | Unit testing with JUnit 5 & Mockito; JDBC transactional rollback testing; black-box (EP & BVA) and white-box basis path testing across test cases. | [`docs/TESTING_AND_TEST_CASES.md`](docs/TESTING_AND_TEST_CASES.md)<br>100% Pass Verification Reports |
+| **Phase 5** | **Deployment & Maintenance** | Verified system components | Master launcher script creation (`run_project.bat`), environment automation, documentation, and version control delivery. | `run_project.bat`<br>GitHub Repository Release |
+
+##### Why the Waterfall Model Was Chosen for WCM-EDAS:
+1. **Clear and Stable Requirements:** Municipal requirements for residential sectors, fleet types, waste segregation (Biodegradable, Recyclable, Non-Recyclable), and environmental analytics are unambiguous and fully specified upfront.
+2. **Sequential Architectural Dependencies:** 
+   - The **Database Schema (3NF)** must be designed and created before developing Java Data Access Objects (DAOs).
+   - The **Java Application** must insert operational records before the **Python Analytics Module** can extract live data to generate charts.
+3. **Rigorous Quality Gateways:** Enables formal stage-gate evaluation at each university assessment milestone (SRS $\rightarrow$ Design Models $\rightarrow$ Code $\rightarrow$ Test Results $\rightarrow$ Live Repository).
+4. **End-to-End Traceability:** Every test case in Phase 4 maps directly back to functional requirements specified in Phase 1.
+
+> 📖 **Full Waterfall Model Documentation:** See [`docs/WATERFALL_MODEL.md`](docs/WATERFALL_MODEL.md) for detailed phase gates, entry/exit criteria, and curriculum integration.
 
 #### 1.5 Incremental & Evolutionary Models
 - **Increment 1**: Area and vehicle CRUD  
